@@ -1,0 +1,92 @@
+# ============================================================
+#  stm32-iot-node .gitignore
+# 原则：构建产物一律不提交；决定"clone 下来能否直接编译调试"的
+#      配置一律提交。详见 docs/git-速查表.md 第四节。
+# ============================================================
+
+# ============ 构建产物 ============
+build/
+Build/
+cmake-build-*/
+Debug/
+Release/
+Objects/
+Listings/
+
+*.o
+*.obj
+*.axf
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+*.su
+*.d
+*.dep
+*.crf
+*.lnp
+*.sct
+*.scvd
+*.uvguix.*
+*.gui.ini
+
+# ============ CMSIS 里的压仓货（GCC 工程用不到）============
+# 实测依据：cmake/stm32cubemx/CMakeLists.txt 只引用
+#   Drivers/CMSIS/Device/ST/STM32F1xx/Include
+#   Drivers/CMSIS/Include
+# Lib/ 是 Keil/IAR 的预编译 .lib（35 MB，GCC 完全不认）；
+# DSP/ 13 MB、NN/ 1 MB，只有用 arm_math / 神经网络时才需要。
+# 排除后仓库从 68 MB 降到约 19 MB。若将来在 CubeMX 里启用 DSP 库，
+# 把下面三行删掉再重新 add 即可。
+Drivers/CMSIS/Lib/
+Drivers/CMSIS/DSP/
+Drivers/CMSIS/NN/
+
+# ============ CubeMX 备份与临时文件 ============
+# 注意：.mxproject 与 *.ioc 是工程源文件，必须提交，不要加进来
+mx.scratch
+Backup/
+/Core/Backup/
+
+# ============ IDE / 编辑器 ============
+# 注意：.vscode/settings.json、launch.json、c_cpp_properties.json
+#      与 .clangd 都要提交 —— 它们让仓库可复现。这里只忽略本地噪声。
+.vscode/*.log
+.vscode/ipch/
+.vscode/launch.json.bak
+.idea/
+*.uvprojx.bak
+*.uvoptx.bak
+*.mxproject.bak
+.history/
+
+# ============ Python 上位机 ============
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+env/
+*.egg-info/
+.pytest_cache/
+
+# 实测数据原始记录（体积大，且常含设备标识）
+data/*.csv
+data/*.log
+
+# ============ 硬件工具临时文件 ============
+hardware/*/output/tmp/
+*.lck
+~$*.xlsx
+
+# ============ 操作系统 ============
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ============ 凭据（务必不要提交）============
+# 提交前自检：有没有手机号 / 邮箱 / 密码 / WiFi 密码？
+.env
+wifi_credentials.h
+secrets.h
+credentials.h
